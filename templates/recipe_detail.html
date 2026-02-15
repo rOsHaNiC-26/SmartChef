@@ -1,0 +1,300 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="recipe-detail-page">
+    <div class="recipe-detail-container">
+        <!-- Recipe Header -->
+        <div class="recipe-header">
+            <div class="recipe-image-large">
+                <img src="{{ recipe.image }}" alt="{{ recipe.title }}"
+                    onerror="this.src='/static/images/default-recipe.jpg'">
+                <span class="recipe-category {{ recipe.category }}">{{ recipe.category|title }}</span>
+            </div>
+            <div class="recipe-info">
+                <h1 class="recipe-title" data-en="{{ recipe.title }}"
+                    data-hi="{{ recipe.title_hi|default:recipe.title }}"
+                    data-mr="{{ recipe.title_mr|default:recipe.title }}">{{ recipe.title }}</h1>
+                <div class="recipe-author-info">
+                    <span class="author-avatar large">{{ recipe.author|slice:":1"|upper }}</span>
+                    <div class="author-details">
+                        <span class="author-name">{{ recipe.author }}</span>
+                        <span class="recipe-date">Shared a delicious recipe</span>
+                    </div>
+                </div>
+                <div class="recipe-stats-bar">
+                    <div class="stat">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <span class="stat-value">{{ recipe.prep_time }}</span>
+                            <span class="stat-label" data-en="Prep Time" data-hi="तैयारी का समय"
+                                data-mr="तयारी वेळ">Prep Time</span>
+                        </div>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-fire"></i>
+                        <div>
+                            <span class="stat-value">{{ recipe.cook_time }}</span>
+                            <span class="stat-label" data-en="Cook Time" data-hi="पकाने का समय"
+                                data-mr="शिजवण्याचा वेळ">Cook Time</span>
+                        </div>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-users"></i>
+                        <div>
+                            <span class="stat-value">{{ recipe.servings }}</span>
+                            <span class="stat-label" data-en="Servings" data-hi="सर्विंग्स"
+                                data-mr="सर्व्हिंग्स">Servings</span>
+                        </div>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-heart"></i>
+                        <div>
+                            <span class="stat-value" id="likeCount">{{ recipe.likes|length|default:recipe.likes
+                                }}</span>
+                            <span class="stat-label" data-en="Likes" data-hi="लाइक्स" data-mr="लाइक्स">Likes</span>
+                        </div>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-star text-warning"></i>
+                        <div>
+                            <span class="stat-value">{{ avg_rating|default:"0.0" }}</span>
+                            <span class="stat-label" data-en="Rating" data-hi="रेटिंग" data-mr="रेटिंग">Rating</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="recipe-actions">
+                    <button class="btn {% if user_liked %}btn-primary liked{% else %}btn-outline{% endif %} btn-icon"
+                        id="likeBtn" data-id="{{ recipe.id }}">
+                        <i class="{% if user_liked %}fas{% else %}far{% endif %} fa-heart"></i>
+                        <span data-en="Like" data-hi="लाइक" data-mr="लाइक">Like</span>
+                    </button>
+                    <!-- Rating Widget -->
+                    <div class="rating-widget">
+                        <div class="stars">
+                            {% for i in "12345" %}
+                            <i class="far fa-star star-input" data-value="{{ forloop.counter }}"></i>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <button class="btn btn-outline btn-icon" id="shareBtn">
+                        <i class="fas fa-share-alt"></i>
+                        <span data-en="Share" data-hi="शेयर" data-mr="शेअर">Share</span>
+                    </button>
+
+                    {% if request.session.user_id %}
+                    <div class="admin-only-actions" style="display: flex; gap: var(--spacing-sm); margin-left: auto;">
+                        <a href="{% url 'edit_recipe' recipe.id %}" class="btn btn-primary"
+                            style="background: var(--info);">
+                            <i class="fas fa-edit"></i>
+                            <span data-en="Edit" data-hi="संपादित करें" data-mr="संपादित करा">Edit</span>
+                        </a>
+                        <form action="{% url 'delete_recipe' recipe.id %}" method="POST"
+                            onsubmit="return confirm('Absolutely sure about deleting this?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash"></i>
+                                <span data-en="Delete" data-hi="हटाएं" data-mr="हटवा">Delete</span>
+                            </button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Recipe Content -->
+        <div class="recipe-content-grid">
+            <!-- Ingredients -->
+            <div class="recipe-section ingredients-section">
+                <h2>
+                    <i class="fas fa-list-ul"></i>
+                    <span data-en="Ingredients" data-hi="सामग्री" data-mr="साहित्य">Ingredients</span>
+                </h2>
+                <ul class="ingredients-list">
+                    {% for ingredient in recipe.ingredients %}
+                    <li>
+                        <label class="ingredient-item">
+                            <input type="checkbox" class="ingredient-checkbox">
+                            <span class="checkmark"></span>
+                            <span class="ingredient-text">{{ ingredient }}</span>
+                        </label>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Steps -->
+            <div class="recipe-section steps-section">
+                <h2>
+                    <i class="fas fa-tasks"></i>
+                    <span data-en="Instructions" data-hi="निर्देश" data-mr="सूचना">Instructions</span>
+                </h2>
+                <ol class="steps-list">
+                    {% for step in translated_steps %}
+                    <li class="step-item">
+                        <div class="step-number">{{ forloop.counter }}</div>
+                        <div class="step-content" data-en="{{ step.en }}" data-hi="{{ step.hi }}"
+                            data-mr="{{ step.mr }}">{{ step.en }}</div>
+                    </li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="recipe-section comments-section" style="margin-top: 2rem;">
+            <h2 style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
+                <i class="fas fa-comments" style="color: var(--primary);"></i>
+                <span data-en="Comments" data-hi="टिप्पणियाँ" data-mr="प्रतिक्रिया">Comments</span>
+                <span class="badge"
+                    style="background: var(--primary); color: white; padding: 2px 8px; border-radius: 99px; font-size: 0.8rem;">{{
+                    comments|length }}</span>
+            </h2>
+
+            {% if current_user %}
+            <form action="{% url 'add_comment' recipe.id %}" method="POST" class="comment-form"
+                style="margin-bottom: 2rem;">
+                {% csrf_token %}
+                <textarea name="text" placeholder="Share your thoughts about this recipe..." required
+                    style="width: 100%; min-height: 100px; padding: 1rem; border-radius: 0.5rem; border: 1px solid var(--border-light); margin-bottom: 1rem; background: var(--bg-primary); color: var(--text-primary);"></textarea>
+                <button type="submit" class="btn btn-primary">Post Comment</button>
+            </form>
+            {% else %}
+            <p class="login-msg"
+                style="margin-bottom: 2rem; padding: 1rem; background: var(--bg-secondary); border-radius: 0.5rem; text-align: center;">
+                <a href="{% url 'login' %}" style="color: var(--primary); font-weight: bold;">Login</a> to join the
+                conversation.
+            </p>
+            {% endif %}
+
+            <div class="comments-list" style="display: flex; flex-direction: column; gap: 1rem;">
+                {% for comment in comments %}
+                <div class="comment-item"
+                    style="display: flex; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 0.5rem; border: 1px solid var(--border-light);">
+                    <div class="comment-avatar"
+                        style="width: 40px; height: 40px; background: var(--primary-gradient); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">
+                        {{ comment.author|slice:":1"|upper }}</div>
+                    <div class="comment-body" style="flex: 1;">
+                        <div class="comment-header"
+                            style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                            <span class="comment-author" style="font-weight: 600; color: var(--text-primary);">{{
+                                comment.author }}</span>
+                            <span class="comment-date" style="font-size: 0.75rem; color: var(--text-muted);">{{
+                                comment.created_at|timesince }} ago</span>
+                        </div>
+                        <p class="comment-text"
+                            style="color: var(--text-secondary); line-height: 1.5; font-size: 0.95rem;">{{ comment.text
+                            }}</p>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="empty-comments" style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
+                    <i class="fas fa-comment-dots" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+                    <p>No comments yet. Be the first to share your experience!</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <div class="recipe-back">
+            <a href="{% url 'recipes' %}" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i>
+                <span data-en="Back to Recipes" data-hi="रेसिपी पर वापस" data-mr="रेसिपींवर परत">Back to Recipes</span>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // CSRF Helper
+    function getCSRF() {
+        return document.querySelector('[name=csrfmiddlewaretoken]').value;
+    }
+
+    // Like button AJAX
+    document.getElementById('likeBtn').addEventListener('click', async function () {
+        const recipeId = this.dataset.id;
+        try {
+            const response = await fetch(`/like/${recipeId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCSRF()
+                }
+            });
+            const data = await response.json();
+            if (data.success) {
+                this.classList.toggle('liked', data.action === 'liked');
+                this.classList.toggle('btn-primary', data.action === 'liked');
+                this.classList.toggle('btn-outline', data.action === 'unliked');
+                const icon = this.querySelector('i');
+                icon.className = data.action === 'liked' ? 'fas fa-heart' : 'far fa-heart';
+                document.getElementById('likeCount').textContent = data.count;
+            }
+        } catch (err) {
+            console.error('Like failed:', err);
+        }
+    });
+
+    // Rating System
+    document.querySelectorAll('.star-input').forEach(star => {
+        star.addEventListener('mouseover', function () {
+            const val = this.dataset.value;
+            highlightStars(val);
+        });
+
+        star.addEventListener('click', async function () {
+            const val = this.dataset.value;
+            const recipeId = '{{ recipe.id }}';
+            try {
+                const response = await fetch(`/rate/${recipeId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': getCSRF()
+                    },
+                    body: `rating=${val}`
+                });
+                const data = await response.json();
+                if (data.success) {
+                    window.location.reload();
+                }
+            } catch (err) {
+                console.error('Rating failed:', err);
+            }
+        });
+    });
+
+    document.querySelector('.stars').addEventListener('mouseleave', () => {
+        highlightStars(0);
+    });
+
+    function highlightStars(count) {
+        document.querySelectorAll('.star-input').forEach(s => {
+            s.className = s.dataset.value <= count ? 'fas fa-star star-input' : 'far fa-star star-input';
+        });
+    }
+
+    // Share functionality
+    document.getElementById('shareBtn').addEventListener('click', function () {
+        if (navigator.share) {
+            navigator.share({
+                title: '{{ recipe.title }}',
+                text: 'Check out this delicious recipe on SmartChef!',
+                url: window.location.href
+            });
+        } else {
+            // Fallback - copy to clipboard
+            navigator.clipboard.writeText(window.location.href);
+            if (typeof showNotification === 'function') {
+                showNotification('Link copied to clipboard!', 'success');
+            } else {
+                alert('Link copied to clipboard!');
+            }
+        }
+    });
+</script>
+{% endblock %}

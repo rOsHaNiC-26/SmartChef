@@ -1,0 +1,121 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="page-section form-page">
+    <div class="form-container">
+        <div class="form-header">
+            <h1>
+                <i class="fas fa-edit"></i>
+                <span data-en="Edit Recipe" data-hi="à¤°à¥‡à¤¸à¤¿à¤ªà¥€ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¿à¤¤ à¤•à¤°à¥‡à¤‚" data-mr="à¤°à¥‡à¤¸à¤¿à¤ªà¥€ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¿à¤¤ à¤•à¤°à¤¾">Edit
+                    Recipe</span>
+            </h1>
+            <p data-en="Update your recipe details" data-hi="à¤…à¤ªà¤¨à¥€ à¤°à¥‡à¤¸à¤¿à¤ªà¥€ à¤•à¤¾ à¤µà¤¿à¤µà¤°à¤£ à¤…à¤ªà¤¡à¥‡à¤Ÿ à¤•à¤°à¥‡à¤‚"
+                data-mr="à¤¤à¥à¤®à¤šà¥à¤¯à¤¾ à¤°à¥‡à¤¸à¤¿à¤ªà¥€à¤šà¥‡ à¤¤à¤ªà¤¶à¥€à¤² à¤…à¤ªà¤¡à¥‡à¤Ÿ à¤•à¤°à¤¾">Update your recipe details</p>
+        </div>
+
+        <form class="recipe-form" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-grid">
+                <!-- Left Column -->
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="title">
+                            <i class="fas fa-heading"></i>
+                            <span data-en="Recipe Title" data-hi="à¤°à¥‡à¤¸à¤¿à¤ªà¥€ à¤•à¤¾ à¤¨à¤¾à¤®" data-mr="à¤°à¥‡à¤¸à¤¿à¤ªà¥€à¤šà¥‡ à¤¨à¤¾à¤µ">Recipe
+                                Title</span>
+                        </label>
+                        <input type="text" id="title" name="title" required value="{{ recipe.title }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">
+                            <i class="fas fa-tags"></i>
+                            <span data-en="Category" data-hi="à¤¶à¥à¤°à¥‡à¤£à¥€" data-mr="à¤¶à¥à¤°à¥‡à¤£à¥€">Category</span>
+                        </label>
+                        <select id="category" name="category" required>
+                            {% for cat in categories %}
+                            <option value="{{ cat.id }}" {% if recipe.category == cat.id %}selected{% endif %}>{{ cat.icon
+                                }} {{ cat.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="prep_time">
+                                <i class="fas fa-clock"></i>
+                                <span data-en="Prep Time" data-hi="à¤¤à¥ˆà¤¯à¤¾à¤°à¥€ à¤•à¤¾ à¤¸à¤®à¤¯" data-mr="à¤¤à¤¯à¤¾à¤°à¥€ à¤µà¥‡à¤³">Prep Time</span>
+                            </label>
+                            <input type="text" id="prep_time" name="prep_time" value="{{ recipe.prep_time }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cook_time">
+                                <i class="fas fa-fire"></i>
+                                <span data-en="Cook Time" data-hi="à¤ªà¤•à¤¾à¤¨à¥‡ à¤•à¤¾ à¤¸à¤®à¤¯" data-mr="à¤¶à¤¿à¤œà¤µà¤£à¥à¤¯à¤¾à¤šà¤¾ à¤µà¥‡à¤³">Cook
+                                    Time</span>
+                            </label>
+                            <input type="text" id="cook_time" name="cook_time" value="{{ recipe.cook_time }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="servings">
+                                <i class="fas fa-users"></i>
+                                <span data-en="Servings" data-hi="à¤¸à¤°à¥à¤µà¤¿à¤‚à¤—à¥à¤¸" data-mr="à¤¸à¤°à¥à¤µà¥à¤¹à¤¿à¤‚à¤—à¥à¤¸">Servings</span>
+                            </label>
+                            <input type="number" id="servings" name="servings" min="1" value="{{ recipe.servings }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <i class="fas fa-image"></i>
+                            <span data-en="Current Image" data-hi="à¤µà¤°à¥à¤¤à¤®à¤¾à¤¨ à¤›à¤µà¤¿" data-mr="à¤µà¤°à¥à¤¤à¤®à¤¾à¤¨ à¤ªà¥à¤°à¤¤à¤¿à¤®à¤¾">Current
+                                Image</span>
+                        </label>
+                        <div class="current-image">
+                            <img src="{{ recipe.image }}" alt="{{ recipe.title }}"
+                                onerror="this.src='/static/images/default-recipe.jpg'">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="ingredients">
+                            <i class="fas fa-list-ul"></i>
+                            <span data-en="Ingredients" data-hi="à¤¸à¤¾à¤®à¤—à¥à¤°à¥€" data-mr="à¤¸à¤¾à¤¹à¤¿à¤¤à¥à¤¯">Ingredients</span>
+                            <small>(one per line)</small>
+                        </label>
+                        <textarea id="ingredients" name="ingredients" rows="8" required>{% for ing in recipe.ingredients %}{{ ing }}
+{% endfor %}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="steps">
+                            <i class="fas fa-tasks"></i>
+                            <span data-en="Instructions" data-hi="à¤¨à¤¿à¤°à¥à¤¦à¥‡à¤¶" data-mr="à¤¸à¥‚à¤šà¤¨à¤¾">Instructions</span>
+                            <small>(one step per line)</small>
+                        </label>
+                        <textarea id="steps" name="steps" rows="10" required>{% for step in recipe.steps %}{{ step }}
+{% endfor %}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <a href="{% url 'my_recipes' %}" class="btn btn-outline btn-lg">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-save"></i>
+                    <span data-en="Save Changes" data-hi="à¤¬à¤¦à¤²à¤¾à¤µ à¤¸à¤¹à¥‡à¤œà¥‡à¤‚" data-mr="à¤¬à¤¦à¤² à¤œà¤¤à¤¨ à¤•à¤°à¤¾">Save Changes</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

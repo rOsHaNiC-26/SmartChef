@@ -1,0 +1,31 @@
+/*
+ * SmartChef - Main Entry Point CSS
+ * This file imports all modular CSS files to build the full design system.
+ */
+
+@import url('variables.css');
+@import url('components.css');
+@import url('pages.css');
+@import url('forms.css');
+@import url('responsive.css');
+
+/* Global Utilities */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+}
+
+.section-padding {
+    padding: var(--spacing-3xl) 0;
+}
+
+/* Fix for broken images or layout issues seen in screenshot */
+.navbar {
+    top: 0;
+}
+
+main.main-content {
+    min-height: calc(100vh - 80px - 300px);
+    /* Adjust based on navbar and footer heights */
+}

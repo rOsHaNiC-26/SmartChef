@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="page-section form-page">
+    <div class="form-container">
+        <div class="form-header">
+            <h1>
+                <i class="fas fa-plus-circle"></i>
+                <span data-en="Add New Recipe" data-hi="नई रेसिपी जोड़ें" data-mr="नवीन रेसिपी जोडा">Add New
+                    Recipe</span>
+            </h1>
+            <p data-en="Share your delicious creation with the community"
+                data-hi="समुदाय के साथ अपनी स्वादिष्ट रचना साझा करें"
+                data-mr="समुदायासोबत तुमची स्वादिष्ट रचना शेअर करा">Share your delicious creation with the community</p>
+        </div>
+
+        <form class="recipe-form" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-grid">
+                <!-- Left Column -->
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="title">
+                            <i class="fas fa-heading"></i>
+                            <span data-en="Recipe Title" data-hi="रेसिपी का नाम" data-mr="रेसिपीचे नाव">Recipe
+                                Title</span>
+                        </label>
+                        <input type="text" id="title" name="title" required placeholder="Enter recipe name...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">
+                            <i class="fas fa-tags"></i>
+                            <span data-en="Category" data-hi="श्रेणी" data-mr="श्रेणी">Category</span>
+                        </label>
+                        <select id="category" name="category" required>
+                            {% for cat in categories %}
+                            <option value="{{ cat.id }}">{{ cat.icon }} {{ cat.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="prep_time">
+                                <i class="fas fa-clock"></i>
+                                <span data-en="Prep Time" data-hi="तैयारी का समय" data-mr="तयारी वेळ">Prep Time</span>
+                            </label>
+                            <input type="text" id="prep_time" name="prep_time" placeholder="e.g., 15 mins">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cook_time">
+                                <i class="fas fa-fire"></i>
+                                <span data-en="Cook Time" data-hi="पकाने का समय" data-mr="शिजवण्याचा वेळ">Cook
+                                    Time</span>
+                            </label>
+                            <input type="text" id="cook_time" name="cook_time" placeholder="e.g., 30 mins">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="servings">
+                                <i class="fas fa-users"></i>
+                                <span data-en="Servings" data-hi="सर्विंग्स" data-mr="सर्व्हिंग्स">Servings</span>
+                            </label>
+                            <input type="number" id="servings" name="servings" min="1" value="2">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">
+                            <i class="fas fa-image"></i>
+                            <span data-en="Recipe Image" data-hi="रेसिपी की फोटो" data-mr="रेसिपीचा फोटो">Recipe
+                                Image</span>
+                        </label>
+                        <div class="image-upload">
+                            <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(this)">
+                            <label for="image" class="upload-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Click to upload image</span>
+                            </label>
+                            <img id="imagePreview" class="image-preview" style="display: none;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="ingredients">
+                            <i class="fas fa-list-ul"></i>
+                            <span data-en="Ingredients" data-hi="सामग्री" data-mr="साहित्य">Ingredients</span>
+                            <small>(one per line)</small>
+                        </label>
+                        <textarea id="ingredients" name="ingredients" rows="8" required placeholder="Paneer - 250g
+Butter - 50g
+Tomato - 4
+Cream - 100ml
+..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="steps">
+                            <i class="fas fa-tasks"></i>
+                            <span data-en="Instructions" data-hi="निर्देश" data-mr="सूचना">Instructions</span>
+                            <small>(one step per line)</small>
+                        </label>
+                        <textarea id="steps" name="steps" rows="10" required placeholder="Heat oil in a pan
+Add onions and sauté until golden
+Add tomatoes and cook until soft
+..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <a href="{% url 'my_recipes' %}" class="btn btn-outline btn-lg">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-check"></i>
+                    <span data-en="Add Recipe" data-hi="रेसिपी जोड़ें" data-mr="रेसिपी जोडा">Add Recipe</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function previewImage(input) {
+        const preview = document.getElementById('imagePreview');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+{% endblock %}

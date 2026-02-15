@@ -1,0 +1,205 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="{{ language|default:'en' }}" data-theme="{{ theme|default:'light' }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="SmartChef - Share your recipes with the world. Discover delicious recipes from home cooks around the globe.">
+    <meta name="keywords" content="recipes, cooking, food, SmartChef, share recipes">
+    <title>{% block title %}{{ page_title|default:'SmartChef' }}{% endblock %}</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <!-- Notification Container -->
+    <div id="notification-container" class="notification-container">
+        {% for notification in notifications %}
+        <div class="notification notification-{{ notification.type }}" data-auto-dismiss="true">
+            <span class="notification-icon">
+                {% if notification.type == 'success' %}✓{% endif %}
+                {% if notification.type == 'error' %}✕{% endif %}
+                {% if notification.type == 'warning' %}⚠{% endif %}
+                {% if notification.type == 'info' %}ℹ{% endif %}
+            </span>
+            <span class="notification-message">{{ notification.message }}</span>
+            <button class="notification-close" onclick="this.parentElement.remove()">×</button>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Navbar -->
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{% url 'home' %}" class="nav-logo">
+                <span class="logo-icon">👨‍🍳</span>
+                <span class="logo-text">SmartChef</span>
+            </a>
+
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="{% url 'home' %}" class="nav-link {% if request.path == '/home/' %}active{% endif %}">
+                        <i class="fas fa-home"></i>
+                        <span data-en="Home" data-hi="होम" data-mr="होम">Home</span>
+                    </a></li>
+                <li><a href="{% url 'recipes' %}"
+                        class="nav-link {% if 'recipes' in request.path and 'my-recipes' not in request.path %}active{% endif %}">
+                        <i class="fas fa-utensils"></i>
+                        <span data-en="Recipes" data-hi="रेसिपी" data-mr="रेसिपी">Recipes</span>
+                    </a></li>
+                {% if current_user %}
+                <li><a href="{% url 'add_recipe' %}"
+                        class="nav-link {% if 'add-recipe' in request.path %}active{% endif %}">
+                        <i class="fas fa-plus-circle"></i>
+                        <span data-en="Add Recipe" data-hi="रेसिपी जोड़ें" data-mr="रेसिपी जोडा">Add Recipe</span>
+                    </a></li>
+                {% else %}
+                <li class="mobile-only"><a href="{% url 'login' %}" class="nav-link">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span data-en="Login" data-hi="लॉगिन" data-mr="लॉगिन">Login</span>
+                    </a></li>
+                <li class="mobile-only"><a href="{% url 'register' %}" class="nav-link">
+                        <i class="fas fa-user-plus"></i>
+                        <span data-en="Sign Up" data-hi="साइन अप" data-mr="साइन अप">Sign Up</span>
+                    </a></li>
+                {% endif %}
+            </ul>
+
+            <div class="nav-actions">
+                <!-- Notification Bell -->
+                <div class="notification-bell-container">
+                    <button class="nav-btn icon-btn" id="bellBtn" title="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+                    </button>
+                    <div class="notification-dropdown" id="notificationDropdown">
+                        <div class="dropdown-header">Notifications</div>
+                        <div class="notification-list" id="notificationList">
+                            <div class="empty-notifications">
+                                <i class="far fa-bell-slash"></i>
+                                <p>No new notifications</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Theme Toggle -->
+                <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+                    <i class="fas fa-sun" id="themeIcon"></i>
+                </button>
+
+                {% if current_user %}
+                <!-- Settings / User Dropdown -->
+                <div class="user-menu">
+                    <button class="user-btn" id="userBtn">
+                        <span class="user-avatar">{{ current_user.username|slice:":1"|upper }}</span>
+                        <span class="user-name">Settings</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="dropdown-header">Hello, {{ current_user.username }}</div>
+                        <a href="{% url 'profile' %}"><i class="fas fa-user-circle"></i> My Account</a>
+
+                        <!-- Language Submenu -->
+                        <div class="dropdown-item-submenu">
+                            <span class="submenu-trigger"><i class="fas fa-language"></i> Languages <i
+                                    class="fas fa-chevron-right ms-auto"></i></span>
+                            <div class="submenu-content">
+                                <a href="#" onclick="changeLanguage('en'); return false;">English</a>
+                                <a href="#" onclick="changeLanguage('hi'); return false;">Hindi</a>
+                                <a href="#" onclick="changeLanguage('mr'); return false;">Marathi</a>
+                            </div>
+                        </div>
+
+                        <a href="{% url 'support' %}"><i class="fas fa-headset"></i> Customer Support</a>
+                        <a href="{% url 'rate_us' %}"><i class="fas fa-star"></i> Rate Us</a>
+                        <a href="#" onclick="shareApp(); return false;"><i class="fas fa-share-alt"></i> Share</a>
+                        <hr>
+                        <a href="{% url 'logout' %}" class="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+                {% else %}
+                <a href="{% url 'login' %}" class="btn btn-outline">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                <a href="{% url 'register' %}" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </a>
+                {% endif %}
+
+                <!-- Mobile Menu Toggle -->
+                <button class="nav-toggle" id="navToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <span class="logo-icon">👨‍🍳</span>
+                <span class="logo-text">SmartChef</span>
+                <p data-en="Share your culinary creations with the world"
+                    data-hi="अपनी पाक कृतियों को दुनिया के साथ साझा करें" data-mr="तुमच्या पाककला जगासोबत शेअर करा">
+                    Share your culinary creations with the world
+                </p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'recipes' %}">Recipes</a>
+                {% if current_user %}
+                <a href="{% url 'my_recipes' %}">My Recipes</a>
+                {% endif %}
+            </div>
+            <div class="footer-links">
+                <h4>Categories</h4>
+                <a href="{% url 'recipes' %}?category=veg">Vegetarian</a>
+                <a href="{% url 'recipes' %}?category=non-veg">Non-Vegetarian</a>
+                <a href="{% url 'recipes' %}?category=desserts">Desserts</a>
+            </div>
+            <div class="footer-social">
+                <h4>Connect</h4>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 SmartChef. Developed by Roshani Chaurasiya.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

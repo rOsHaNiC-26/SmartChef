@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-bg">
+        <div class="hero-shape shape-1"></div>
+        <div class="hero-shape shape-2"></div>
+        <div class="hero-shape shape-3"></div>
+    </div>
+    <div class="hero-content">
+        <div class="hero-text">
+            <span class="hero-badge">🍳 Welcome to SmartChef</span>
+            <h1 class="hero-title">
+                <span data-en="Share Your" data-hi="अपनी" data-mr="तुमची">Share Your</span>
+                <span class="gradient-text" data-en="Delicious" data-hi="स्वादिष्ट" data-mr="स्वादिष्ट">Delicious</span>
+                <span data-en="Recipes" data-hi="रेसिपी शेयर करें" data-mr="रेसिपी शेअर करा">Recipes</span>
+            </h1>
+            <p class="hero-description"
+                data-en="Join our community of food lovers. Share your favorite recipes, discover new dishes, and connect with passionate home cooks from around the world."
+                data-hi="खाने के शौकीनों के हमारे समुदाय में शामिल हों। अपनी पसंदीदा रेसिपी शेयर करें, नई डिश खोजें।"
+                data-mr="खाद्यप्रेमींच्या आमच्या समुदायात सामील व्हा. तुमच्या आवडत्या रेसिपी शेअर करा.">
+                Join our community of food lovers. Share your favorite recipes, discover new dishes, and connect with
+                passionate home cooks from around the world.
+            </p>
+            <div class="hero-actions">
+                <a href="{% url 'recipes' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-utensils"></i>
+                    <span data-en="Explore Recipes" data-hi="रेसिपी देखें" data-mr="रेसिपी पहा">Explore Recipes</span>
+                </a>
+                {% if not current_user %}
+                <a href="{% url 'register' %}" class="btn btn-outline btn-lg">
+                    <i class="fas fa-user-plus"></i>
+                    <span data-en="Join Free" data-hi="मुफ्त जुड़ें" data-mr="मोफत सामील व्हा">Join Free</span>
+                </a>
+                {% else %}
+                <a href="{% url 'add_recipe' %}" class="btn btn-outline btn-lg">
+                    <i class="fas fa-plus"></i>
+                    <span data-en="Add Recipe" data-hi="रेसिपी जोड़ें" data-mr="रेसिपी जोडा">Add Recipe</span>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="floating-card card-1">
+                <img src="{% static 'images/paneer-butter-masala.jpg' %}" alt="Recipe">
+                <span>Paneer Masala</span>
+            </div>
+            <div class="floating-card card-2">
+                <img src="{% static 'images/chicken-biryani.jpg' %}" alt="Recipe">
+                <span>Chicken Biryani</span>
+            </div>
+            <div class="floating-card card-3">
+                <span class="big-emoji">🍽️</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+    <div class="stats-container">
+        <div class="stat-card">
+            <span class="stat-icon">📖</span>
+            <span class="stat-number">500+</span>
+            <span class="stat-label" data-en="Recipes" data-hi="रेसिपी" data-mr="रेसिपी">Recipes</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-icon">👨‍🍳</span>
+            <span class="stat-number">200+</span>
+            <span class="stat-label" data-en="Chefs" data-hi="शेफ" data-mr="शेफ">Chefs</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-icon">❤️</span>
+            <span class="stat-number">10K+</span>
+            <span class="stat-label" data-en="Likes" data-hi="लाइक्स" data-mr="लाइक्स">Likes</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-icon">🌍</span>
+            <span class="stat-number">50+</span>
+            <span class="stat-label" data-en="Cuisines" data-hi="व्यंजन" data-mr="पाककृती">Cuisines</span>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="categories-section">
+    <div class="section-header">
+        <h2 data-en="Browse by Category" data-hi="श्रेणी के अनुसार ब्राउज़ करें" data-mr="श्रेणीनुसार ब्राउझ करा">Browse
+            by Category</h2>
+        <p data-en="Find recipes that match your taste" data-hi="अपनी पसंद की रेसिपी खोजें"
+            data-mr="तुमच्या आवडीच्या रेसिपी शोधा">Find recipes that match your taste</p>
+    </div>
+    <div class="categories-grid">
+        {% for category in categories %}
+        {% if category.id != 'all' %}
+        <a href="{% url 'recipes' %}?category={{ category.id }}" class="category-card">
+            <span class="category-icon">{{ category.icon }}</span>
+            <span class="category-name" data-en="{{ category.name }}" data-hi="{{ category.name_hi }}"
+                data-mr="{{ category.name_mr }}">{{ category.name }}</span>
+        </a>
+        {% endif %}
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Trending Recipes Section -->
+<section class="featured-section bg-light">
+    <div class="section-header">
+        <div class="hero-badge"
+            style="background: rgba(124, 58, 237, 0.1); color: var(--accent); margin-bottom: 0.5rem;">🔥 TRENDING NOW
+        </div>
+        <h2 data-en="Popular Culinary Hits" data-hi="लोकप्रिय रेसिपी" data-mr="लोकप्रिय रेसिपी">Popular Culinary Hits
+        </h2>
+        <p data-en="The most loved recipes by our community this week"
+            data-hi="इस सप्ताह हमारे समुदाय द्वारा सबसे अधिक पसंद की जाने वाली रेसिपी"
+            data-mr="या आठवड्यात आमच्या समुदायाने सर्वाधिक पसंती दिलेल्या रेसिपी">The most loved recipes by our
+            community this week</p>
+    </div>
+    <div class="recipes-grid">
+        {% for recipe in trending %}
+        <article class="recipe-card trending-card">
+            <div class="recipe-image">
+                <img src="{{ recipe.image }}" alt="{{ recipe.title }}"
+                    onerror="this.src='/static/images/default-recipe.jpg'">
+                <span class="recipe-category {{ recipe.category }}">{{ recipe.category|title }}</span>
+                <div class="recipe-overlay">
+                    <a href="{% url 'recipe_detail' recipe.id %}" class="overlay-btn"><i class="fas fa-eye"></i></a>
+                </div>
+            </div>
+            <div class="recipe-content">
+                <h3 class="recipe-title" data-en="{{ recipe.title }}"
+                    data-hi="{{ recipe.title_hi|default:recipe.title }}"
+                    data-mr="{{ recipe.title_mr|default:recipe.title }}">{{ recipe.title }}</h3>
+                <div class="recipe-meta">
+                    <span><i class="fas fa-user"></i> {{ recipe.author }}</span>
+                    <span><i class="fas fa-star text-warning"></i> {{ recipe.avg_rating|default:"4.5" }}</span>
+                </div>
+                <div class="recipe-footer">
+                    <div class="recipe-stats">
+                        <span><i class="fas fa-heart text-danger"></i> {{ recipe.likes|length|default:recipe.likes
+                            }}</span>
+                        <span><i class="fas fa-eye text-info"></i> {{ recipe.views }}</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Featured Recipes Section -->
+<section class="featured-section">
+    <div class="section-header">
+        <h2 data-en="Latest Recipes" data-hi="नवीनतम रेसिपी" data-mr="नवीनतम रेसिपी">Latest Recipes</h2>
+        <p data-en="Fresh from our community kitchen" data-hi="हमारी कम्युनिटी किचन से"
+            data-mr="आमच्या कम्युनिटी किचनमधून">Fresh from our community kitchen</p>
+    </div>
+    <div class="recipes-grid">
+        {% for recipe in recipes %}
+        <article class="recipe-card">
+            <div class="recipe-image">
+                <img src="{{ recipe.image }}" alt="{{ recipe.title }}"
+                    onerror="this.src='/static/images/default-recipe.jpg'">
+                <span class="recipe-category {{ recipe.category }}">{{ recipe.category|title }}</span>
+            </div>
+            <div class="recipe-content">
+                <h3 class="recipe-title" data-en="{{ recipe.title }}"
+                    data-hi="{{ recipe.title_hi|default:recipe.title }}"
+                    data-mr="{{ recipe.title_mr|default:recipe.title }}">{{ recipe.title }}</h3>
+                <div class="recipe-meta">
+                    <span><i class="fas fa-clock"></i> {{ recipe.cook_time }}</span>
+                    <span><i class="fas fa-user"></i> {{ recipe.author }}</span>
+                </div>
+                <div class="recipe-stats">
+                    <span><i class="fas fa-heart"></i> {{ recipe.likes }}</span>
+                    <span><i class="fas fa-eye"></i> {{ recipe.views }}</span>
+                </div>
+                <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-sm">View Recipe</a>
+            </div>
+        </article>
+        {% empty %}
+        <div class="no-recipes">
+            <span class="big-emoji">🍳</span>
+            <p>No recipes yet. Be the first to share!</p>
+            <a href="{% url 'add_recipe' %}" class="btn btn-primary">Add Recipe</a>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="section-cta">
+        <a href="{% url 'recipes' %}" class="btn btn-outline btn-lg">
+            <span data-en="View All Recipes" data-hi="सभी रेसिपी देखें" data-mr="सर्व रेसिपी पहा">View All
+                Recipes</span>
+            <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works">
+    <div class="section-header">
+        <h2 data-en="How It Works" data-hi="यह कैसे काम करता है" data-mr="हे कसे काम करते">How It Works</h2>
+        <p data-en="Share your recipes in 3 simple steps" data-hi="3 आसान चरणों में अपनी रेसिपी शेयर करें"
+            data-mr="3 सोप्या चरणांमध्ये तुमची रेसिपी शेअर करा">Share your recipes in 3 simple steps</p>
+    </div>
+    <div class="steps-grid">
+        <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-icon">📝</div>
+            <h3 data-en="Create Account" data-hi="अकाउंट बनाएं" data-mr="खाते तयार करा">Create Account</h3>
+            <p data-en="Sign up for free and join our community" data-hi="मुफ्त में साइन अप करें"
+                data-mr="मोफत साइन अप करा">Sign up for free and join our community</p>
+        </div>
+        <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-icon">🍳</div>
+            <h3 data-en="Add Recipe" data-hi="रेसिपी जोड़ें" data-mr="रेसिपी जोडा">Add Recipe</h3>
+            <p data-en="Share your favorite recipes with details" data-hi="विवरण के साथ अपनी रेसिपी शेयर करें"
+                data-mr="तपशीलांसह तुमची रेसिपी शेअर करा">Share your favorite recipes with details</p>
+        </div>
+        <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-icon">🌟</div>
+            <h3 data-en="Get Famous" data-hi="प्रसिद्ध हों" data-mr="प्रसिद्ध व्हा">Get Famous</h3>
+            <p data-en="Receive likes and feedback from others" data-hi="दूसरों से लाइक्स और फीडबैक पाएं"
+                data-mr="इतरांकडून लाइक्स आणि अभिप्राय मिळवा">Receive likes and feedback from others</p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+{% if not current_user %}
+<section class="cta-section">
+    <div class="cta-content">
+        <h2 data-en="Ready to Share Your Recipes?" data-hi="अपनी रेसिपी शेयर करने के लिए तैयार?"
+            data-mr="तुमची रेसिपी शेअर करायला तयार?">Ready to Share Your Recipes?</h2>
+        <p data-en="Join thousands of home chefs sharing their culinary creations"
+            data-hi="हजारों होम शेफ के साथ जुड़ें" data-mr="हजारो होम शेफसोबत सामील व्हा">Join thousands of home chefs
+            sharing their culinary creations</p>
+        <a href="{% url 'register' %}" class="btn btn-primary btn-lg">
+            <i class="fas fa-rocket"></i>
+            <span data-en="Get Started Free" data-hi="मुफ्त शुरू करें" data-mr="मोफत सुरू करा">Get Started Free</span>
+        </a>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

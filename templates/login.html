@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="auth-page">
+    <div class="auth-container">
+        <div class="auth-visual">
+            <div class="auth-bg-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+            </div>
+            <div class="auth-visual-content">
+                <span class="auth-emoji">👨‍🍳</span>
+                <h2>Welcome Back!</h2>
+                <p data-en="Login to share and discover amazing recipes"
+                    data-hi="अद्भुत व्यंजनों को साझा करने और खोजने के लिए लॉगिन करें"
+                    data-mr="अद्भुत पदार्थ शेअर करण्यासाठी आणि शोधण्यासाठी लॉगिन करा">
+                    Login to share and discover amazing recipes
+                </p>
+            </div>
+        </div>
+
+        <div class="auth-form-container">
+            <div class="auth-header">
+                <a href="{% url 'home' %}" class="auth-logo">
+                    <span class="logo-icon">👨‍🍳</span>
+                    <span class="logo-text">SmartChef</span>
+                </a>
+                <h1 data-en="Login" data-hi="लॉगिन" data-mr="लॉगिन">Login</h1>
+                <p data-en="Enter your credentials to continue" data-hi="जारी रखने के लिए अपना विवरण दर्ज करें"
+                    data-mr="सुरू ठेवण्यासाठी तुमचा तपशील प्रविष्ट करा">
+                    Enter your credentials to continue
+                </p>
+            </div>
+
+            <form class="auth-form" method="POST">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="username">
+                        <i class="fas fa-user"></i>
+                        <span data-en="Username or Email" data-hi="उपयोगकर्ता नाम या ईमेल"
+                            data-mr="वापरकर्तानाव किंवा ईमेल">Username or Email</span>
+                    </label>
+                    <input type="text" id="username" name="username" required placeholder="Enter username or email"
+                        autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i>
+                        <span data-en="Password" data-hi="पासवर्ड" data-mr="पासवर्ड">Password</span>
+                    </label>
+                    <div class="password-input">
+                        <input type="password" id="password" name="password" required placeholder="Enter password"
+                            autocomplete="current-password">
+                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                            <i class="fas fa-eye" id="passwordIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg btn-block">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span data-en="Login" data-hi="लॉगिन" data-mr="लॉगिन">Login</span>
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p data-en="Don't have an account?" data-hi="खाता नहीं है?" data-mr="खाते नाही?">Don't have an account?
+                </p>
+                <a href="{% url 'register' %}" class="auth-link">
+                    <span data-en="Create Account" data-hi="खाता बनाएं" data-mr="खाते तयार करा">Create Account</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function togglePassword() {
+        const input = document.getElementById('password');
+        const icon = document.getElementById('passwordIcon');
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+</script>
+{% endblock %}

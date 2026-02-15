@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="auth-page">
+    <div class="auth-container">
+        <div class="auth-visual">
+            <div class="auth-bg-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+            </div>
+            <div class="auth-visual-content">
+                <span class="auth-emoji">🍳</span>
+                <h2>Join SmartChef!</h2>
+                <p data-en="Create an account to start sharing your recipes"
+                    data-hi="अपनी रेसिपी साझा करना शुरू करने के लिए खाता बनाएं"
+                    data-mr="तुमच्या रेसिपी शेअर करण्यासाठी खाते तयार करा">
+                    Create an account to start sharing your recipes
+                </p>
+            </div>
+        </div>
+
+        <div class="auth-form-container">
+            <div class="auth-header">
+                <a href="{% url 'home' %}" class="auth-logo">
+                    <span class="logo-icon">👨‍🍳</span>
+                    <span class="logo-text">SmartChef</span>
+                </a>
+                <h1 data-en="Create Account" data-hi="खाता बनाएं" data-mr="खाते तयार करा">Create Account</h1>
+                <p data-en="Fill in your details to get started" data-hi="शुरू करने के लिए अपना विवरण भरें"
+                    data-mr="सुरू करण्यासाठी तुमचे तपशील भरा">
+                    Fill in your details to get started
+                </p>
+            </div>
+
+            <form class="auth-form" method="POST">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="username">
+                        <i class="fas fa-user"></i>
+                        <span data-en="Username" data-hi="उपयोगकर्ता नाम" data-mr="वापरकर्तानाव">Username</span>
+                    </label>
+                    <input type="text" id="username" name="username" required placeholder="Choose a username"
+                        minlength="3" autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i>
+                        <span data-en="Email" data-hi="ईमेल" data-mr="ईमेल">Email</span>
+                    </label>
+                    <input type="email" id="email" name="email" required placeholder="Enter your email"
+                        autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i>
+                        <span data-en="Password" data-hi="पासवर्ड" data-mr="पासवर्ड">Password</span>
+                    </label>
+                    <div class="password-input">
+                        <input type="password" id="password" name="password" required placeholder="Create a password"
+                            minlength="6" autocomplete="new-password">
+                        <button type="button" class="password-toggle"
+                            onclick="togglePassword('password', 'passwordIcon')">
+                            <i class="fas fa-eye" id="passwordIcon"></i>
+                        </button>
+                    </div>
+                    <small class="form-hint">At least 6 characters</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">
+                        <i class="fas fa-lock"></i>
+                        <span data-en="Confirm Password" data-hi="पासवर्ड की पुष्टि करें"
+                            data-mr="पासवर्डची पुष्टी करा">Confirm Password</span>
+                    </label>
+                    <div class="password-input">
+                        <input type="password" id="confirm_password" name="confirm_password" required
+                            placeholder="Confirm your password" autocomplete="new-password">
+                        <button type="button" class="password-toggle"
+                            onclick="togglePassword('confirm_password', 'confirmIcon')">
+                            <i class="fas fa-eye" id="confirmIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg btn-block">
+                    <i class="fas fa-user-plus"></i>
+                    <span data-en="Create Account" data-hi="खाता बनाएं" data-mr="खाते तयार करा">Create Account</span>
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p data-en="Already have an account?" data-hi="पहले से खाता है?" data-mr="आधीच खाते आहे?">Already have
+                    an account?</p>
+                <a href="{% url 'login' %}" class="auth-link">
+                    <span data-en="Login" data-hi="लॉगिन" data-mr="लॉगिन">Login</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function togglePassword(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="page-section recipes-page">
+    <div class="page-header">
+        <h1 data-en="All Recipes" data-hi="सभी रेसिपी" data-mr="सर्व रेसिपी">All Recipes</h1>
+        <p data-en="Discover delicious recipes from our community" data-hi="हमारी कम्युनिटी से स्वादिष्ट रेसिपी खोजें"
+            data-mr="आमच्या समुदायातून स्वादिष्ट रेसिपी शोधा">Discover delicious recipes from our community</p>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-section">
+        <form class="search-form" action="{% url 'recipes' %}" method="GET">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" name="search" placeholder="Search recipes..." value="{{ search_query }}"
+                    class="search-input">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
+
+        <div style="text-align: right; margin-top: 1rem;">
+            <a href="{% url 'load_api_recipes' %}" class="btn btn-outline btn-sm">
+                <i class="fas fa-cloud-download-alt"></i> Load More from Internet
+            </a>
+        </div>
+
+        <div class="category-filters">
+            {% for category in categories %}
+            <a href="{% url 'recipes' %}?category={{ category.id }}{% if search_query %}&search={{ search_query }}{% endif %}"
+                class="filter-chip {% if current_category == category.id %}active{% endif %}">
+                <span class="chip-icon">{{ category.icon }}</span>
+                <span data-en="{{ category.name }}" data-hi="{{ category.name_hi }}" data-mr="{{ category.name_mr }}">{{
+                    category.name }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Recipes Grid -->
+    <div class="recipes-grid">
+        {% for recipe in recipes %}
+        <article class="recipe-card" data-aos="fade-up">
+            <div class="recipe-image">
+                <img src="{{ recipe.image }}" alt="{{ recipe.title }}" loading="lazy"
+                    onerror="this.src='/static/images/default-recipe.jpg'">
+                <span class="recipe-category {{ recipe.category }}">{{ recipe.category|title }}</span>
+                <div class="recipe-overlay">
+                    <a href="{% url 'recipe_detail' recipe.id %}" class="overlay-btn">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="recipe-content">
+                <h3 class="recipe-title" data-en="{{ recipe.title }}"
+                    data-hi="{{ recipe.title_hi|default:recipe.title }}"
+                    data-mr="{{ recipe.title_mr|default:recipe.title }}">{{ recipe.title }}</h3>
+                <div class="recipe-meta">
+                    <span><i class="fas fa-clock"></i> {{ recipe.cook_time }}</span>
+                    <span><i class="fas fa-users"></i> {{ recipe.servings }} servings</span>
+                </div>
+                <div class="recipe-author">
+                    <span class="author-avatar">{{ recipe.author|slice:":1"|upper }}</span>
+                    <span class="author-name">{{ recipe.author }}</span>
+                </div>
+                <div class="recipe-footer">
+                    <div class="recipe-stats">
+                        <span><i class="fas fa-heart text-danger"></i> {{ recipe.likes_count|default:recipe.likes
+                            }}</span>
+                        <span><i class="fas fa-star text-warning"></i> {{ recipe.avg_rating|default:"4.5" }}</span>
+                        <span><i class="fas fa-eye text-info"></i> {{ recipe.views }}</span>
+                    </div>
+                    <div class="recipe-card-footer-buttons">
+                        <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-sm btn-primary">
+                            <span data-en="View" data-hi="देखें" data-mr="पहा">View</span>
+                        </a>
+                        {% if request.session.user_id %}
+                        <div class="admin-actions">
+                            <a href="{% url 'edit_recipe' recipe.id %}" class="btn btn-sm btn-outline btn-icon"
+                                title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form action="{% url 'delete_recipe' recipe.id %}" method="POST" style="display:inline;"
+                                onsubmit="return confirm('Delete this recipe?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline btn-icon text-danger"
+                                    title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </article>
+        {% empty %}
+        <div class="no-results">
+            <div class="no-results-content">
+                <span class="big-emoji">🔍</span>
+                <h3 data-en="No recipes found" data-hi="कोई रेसिपी नहीं मिली" data-mr="रेसिपी सापडल्या नाहीत">No recipes
+                    found</h3>
+                <p data-en="Try a different search or category" data-hi="एक अलग खोज या श्रेणी आज़माएं"
+                    data-mr="वेगळी शोध किंवा श्रेणी वापरून पहा">Try a different search or category</p>
+                <a href="{% url 'recipes' %}" class="btn btn-outline">
+                    <i class="fas fa-refresh"></i> Clear Filters
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

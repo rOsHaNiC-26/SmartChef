@@ -1,0 +1,534 @@
+/* SmartChef - Components CSS */
+
+/* ==================== BUTTONS ==================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: var(--primary-gradient);
+    color: var(--text-inverse);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+    color: var(--text-inverse);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.btn-outline:hover {
+    background: var(--primary);
+    color: var(--text-inverse);
+}
+
+.btn-danger {
+    background: var(--error);
+    color: var(--text-inverse);
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+}
+
+.btn-sm {
+    padding: var(--spacing-xs) var(--spacing-md);
+    font-size: 0.85rem;
+}
+
+.btn-lg {
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: 1rem;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.btn-icon {
+    padding: var(--spacing-xs);
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+}
+
+/* ==================== NAVBAR ==================== */
+.navbar {
+    position: sticky;
+    top: 0;
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-light);
+    z-index: 200;
+    padding: var(--spacing-md) 0;
+}
+
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-xl);
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.logo-icon {
+    font-size: 1.8rem;
+}
+
+.logo-text {
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    color: var(--text-secondary);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primary);
+    background: rgba(255, 107, 53, 0.1);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.theme-toggle {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+}
+
+.theme-toggle:hover {
+    background: var(--primary);
+    color: var(--text-inverse);
+}
+
+/* User Menu */
+.user-menu {
+    position: relative;
+}
+
+.user-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-xs) var(--spacing-md);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-full);
+    color: var(--text-primary);
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-gradient);
+    color: var(--text-inverse);
+    border-radius: var(--radius-full);
+    font-weight: 600;
+}
+
+.user-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 180px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all var(--transition-fast);
+    z-index: 100;
+}
+
+.user-menu.open .user-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.user-dropdown a {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-lg);
+    color: var(--text-secondary);
+}
+
+.user-dropdown a:hover {
+    background: var(--bg-secondary);
+    color: var(--primary);
+}
+
+.user-dropdown hr {
+    border: none;
+    border-top: 1px solid var(--border-light);
+    margin: var(--spacing-xs) 0;
+}
+
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    width: 30px;
+}
+
+.nav-toggle span {
+    width: 100%;
+    height: 3px;
+    background: var(--text-primary);
+    border-radius: 2px;
+}
+
+/* ==================== NOTIFICATIONS ==================== */
+.notification-container {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    max-width: 400px;
+}
+
+.notification {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    animation: slideInRight 0.3s ease;
+    border-left: 4px solid;
+}
+
+.notification-success {
+    border-color: var(--success);
+}
+
+.notification-error {
+    border-color: var(--error);
+}
+
+.notification-warning {
+    border-color: var(--warning);
+}
+
+.notification-info {
+    border-color: var(--info);
+}
+
+.notification-icon {
+    font-size: 1.2rem;
+    width: 24px;
+    text-align: center;
+}
+
+.notification-success .notification-icon {
+    color: var(--success);
+}
+
+.notification-error .notification-icon {
+    color: var(--error);
+}
+
+.notification-warning .notification-icon {
+    color: var(--warning);
+}
+
+.notification-info .notification-icon {
+    color: var(--info);
+}
+
+.notification-message {
+    flex: 1;
+    font-size: 0.95rem;
+}
+
+.notification-close {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ==================== FOOTER ==================== */
+.footer {
+    margin-top: auto;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-light);
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-3xl) var(--spacing-lg);
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: var(--spacing-2xl);
+}
+
+.footer-brand p {
+    margin-top: var(--spacing-md);
+    color: var(--text-secondary);
+}
+
+.footer-links h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-lg);
+}
+
+.footer-links a {
+    display: block;
+    color: var(--text-secondary);
+    padding: var(--spacing-xs) 0;
+}
+
+.footer-links a:hover {
+    color: var(--primary);
+}
+
+.social-icons {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.social-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border-radius: var(--radius-full);
+}
+
+.social-icon:hover {
+    background: var(--primary);
+    color: var(--text-inverse);
+}
+
+.footer-bottom {
+    padding: var(--spacing-lg);
+    text-align: center;
+    border-top: 1px solid var(--border-light);
+}
+
+.footer-bottom p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* Submenu Styles */
+.dropdown-header {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-weight: 600;
+    color: var(--primary);
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.dropdown-item-submenu {
+    position: relative;
+}
+
+.submenu-trigger {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-lg);
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.submenu-trigger:hover {
+    background: var(--bg-secondary);
+    color: var(--primary);
+}
+
+.submenu-content {
+    display: none;
+    background: var(--bg-tertiary);
+}
+
+.dropdown-item-submenu:hover .submenu-content {
+    display: block;
+}
+
+.submenu-content a {
+    padding-left: var(--spacing-2xl);
+    font-size: 0.9rem;
+}
+
+.ms-auto {
+    margin-left: auto;
+}
+
+
+/* Notification Bell */
+.notification-bell-container {
+    position: relative;
+    margin-right: var(--spacing-sm);
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: var(--spacing-sm);
+    border-radius: 50%;
+    transition: background 0.3s ease;
+    position: relative;
+}
+
+.icon-btn:hover {
+    background: var(--bg-hover);
+    color: var(--primary);
+}
+
+.notification-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: var(--accent);
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 5px;
+    border-radius: 10px;
+    line-height: 1;
+}
+
+.notification-dropdown {
+    position: absolute;
+    top: 120%;
+    right: 0;
+    width: 280px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    display: none;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.notification-bell-container.open .notification-dropdown {
+    display: block;
+    animation: slideDown 0.2s ease-out;
+}
+
+.user-menu.open .user-dropdown {
+    display: block;
+    animation: slideDown 0.2s ease-out;
+}
+
+.empty-notifications {
+    padding: var(--spacing-xl);
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.empty-notifications i {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.5;
+}
+
+/* Recipe Card Manage Buttons */
+.recipe-card-footer-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: var(--spacing-sm);
+}
+
+.admin-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.admin-actions .btn-icon {
+    font-size: 0.8rem;
+    border-color: var(--border-light);
+}
+
+.admin-actions .btn-icon:hover {
+    background: var(--bg-secondary);
+}

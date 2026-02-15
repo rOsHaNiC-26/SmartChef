@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-section">
+    <div class="page-header">
+        <h1>Customer Support</h1>
+        <p>We're here to help you with any issues or questions.</p>
+    </div>
+
+    <div class="form-container" style="max-width: 600px; margin: 0 auto;">
+        <form>
+            <div class="form-group">
+                <label>Issue Type</label>
+                <select>
+                    <option>General Inquiry</option>
+                    <option>Technical Issue</option>
+                    <option>Account Problem</option>
+                    <option>Feedback</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Message</label>
+                <textarea placeholder="Describe your issue here..."></textarea>
+            </div>
+
+            <button type="button" class="btn btn-primary btn-block"
+                onclick="showNotification('Support request sent! We will contact you soon.', 'success')">
+                Submit Request
+            </button>
+        </form>
+
+        <div style="margin-top: 2rem; text-align: center;">
+            <p>Or email us directly at:</p>
+            <a href="mailto:support@smartchef.com"
+                style="color: var(--primary); font-weight: 600;">support@smartchef.com</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

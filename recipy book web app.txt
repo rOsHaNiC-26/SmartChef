@@ -1,0 +1,47 @@
+
+
+web applicasion name : smartchef 
+recipy book web app
+
+user apna recepy shear karega and baki user ko dikhega 
+usi hisab se baki user bhi recepy shear karenge and o recepay hame dikhega 
+
+pages , home = introducsion 
+
+receps = hame sare users ke recypys dikhenge , categary wise recy py surch 
+
+my recepy = add recepy ka opsion bhi aajayega ( add ) 
+
+add recepy pe click karege to app hamse login ya register karvayega ..
+
+login hone ke bad logout ka bhi opsion dega 
+
+after login shows user profile 
+user profil ke ander = langave seting = English defolt , hindi , marathi 
+
+user do whatever then user get avry action the he has a type of notificasion on appp in any corner 
+
+day night mode denge in setting 
+
+
+
+
+
+tecnologys used = frond and bacned dono python 
+Frontend: Django Templates
+Backend: Django Views
+Database: MongoDB Atlas
+Connector: PyMongo
+
+roshani26c
+pw Roshani@26c
+
+mongodb+srv://roshani26c:Roshani@26c@smartchef.a9bmyfs.mongodb.net/?appName=smartchef
+
+
+starting- Logo Animation
+ 
+in background - Particles interaction | Neon Constellations
+
+in navbar - Home, recipes, setting-(dropdown list- my account,              Languages-[ Engilsh, Hindi, Marathi ], Customer Support, Rate Us, Share, Logout), Add recipe, Sign Up/login, themes
+ and all as it is 
