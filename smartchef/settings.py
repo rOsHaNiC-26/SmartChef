@@ -96,6 +96,9 @@ STORAGES = {
     },
 }
 
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_MANIFEST_STRICT = False
+
 # Ensure SECRET_KEY is never empty
 if not SECRET_KEY:
     SECRET_KEY = 'django-insecure-fallback-key-for-initial-deployment'
