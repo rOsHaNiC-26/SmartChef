@@ -92,12 +92,13 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
 
-# Don't crash if manifest is missing (helps during initial build)
-WHITENOISE_MANIFEST_STRICT = False
+# Ensure SECRET_KEY is never empty
+if not SECRET_KEY:
+    SECRET_KEY = 'django-insecure-fallback-key-for-initial-deployment'
 
 # Media files (User uploads)
 MEDIA_URL = 'media/'
