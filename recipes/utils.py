@@ -54,7 +54,7 @@ def fetch_mealdb_recipes(limit=10):
                 steps = [s.strip() for s in instructions_text.replace('\r', '').split('\n') if s.strip()]
                 
                 # Determine category
-                cat_map = {'Vegetarian': 'veg', 'Chicken': 'non-veg', 'Beef': 'non-veg', 'Dessert': 'dessert'}
+                cat_map = {'Vegetarian': 'veg', 'Chicken': 'non-veg', 'Beef': 'non-veg', 'Dessert': 'desserts', 'Seafood': 'non-veg', 'Lamb': 'non-veg', 'Pork': 'non-veg'}
                 api_cat = meal.get('strCategory', 'Vegetarian')
                 category = cat_map.get(api_cat, 'veg' if 'Paneer' in meal['strMeal'] else 'non-veg')
                 

@@ -24,7 +24,7 @@ def process_recipe_data(recipe):
     recipe['likes_count'] = len(likes) if isinstance(likes, list) else likes
     
     # Human-readable category
-    cat_map = {'veg': 'Vegetarian', 'non-veg': 'Non-Vegetarian', 'dessert': 'Desserts', 'drinks': 'Drinks'}
+    cat_map = {'veg': 'Vegetarian', 'non-veg': 'Non-Vegetarian', 'dessert': 'Desserts', 'desserts': 'Desserts', 'drinks': 'Drinks', 'snacks': 'Snacks'}
     recipe['category_name'] = cat_map.get(recipe.get('category'), 'Other')
     return recipe
 
@@ -377,7 +377,7 @@ def profile_view(request):
     user_recipes = db.get_user_recipes(user_id)
     total_recipes = len(user_recipes)
     total_views = sum(r.get('views', 0) for r in user_recipes)
-    total_likes = sum(r.get('likes', 0) for r in user_recipes)
+    total_likes = sum(len(r.get('likes', [])) if isinstance(r.get('likes', []), list) else r.get('likes', 0) for r in user_recipes)
     
     return render(request, 'profile.html', {
         'user': user,

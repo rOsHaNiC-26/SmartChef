@@ -50,18 +50,7 @@ function updateThemeIcon(theme) {
     }
 }
 
-function updateThemeOnServer(theme) {
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
-    if (!csrfToken) return;
-
-    fetch('/settings/update/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `theme=${theme}&csrfmiddlewaretoken=${csrfToken}`
-    }).catch(err => console.log('Theme update failed:', err));
-}
+// updateThemeOnServer is defined later using updateSettingsOnServer
 
 // ==================== NOTIFICATIONS ====================
 function initNotifications() {
